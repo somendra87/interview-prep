@@ -67,8 +67,6 @@ public class RecursiveAddLinkList
         RecursiveAddLinkList resultList = new RecursiveAddLinkList();
         int oldCarry = addRecursiveHelper(head1, sizeOfFirstList, head2, sizeOfSecondList, resultList);
 
-
-
         if (oldCarry > 0){
             resultList.addFirst(oldCarry);
         }
