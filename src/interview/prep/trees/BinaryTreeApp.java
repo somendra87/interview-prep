@@ -113,6 +113,49 @@ public class BinaryTreeApp
         return 0;
     }
 
+    private boolean isUnivalTree(Node root) {
+        if (root == null) {
+            return true;
+        }
+        if (root.leftChild != null && root.leftChild.data != root.data) {
+            return false;
+        }
+        if (root.rightChild != null && root.rightChild.data != root.data) {
+            return false;
+        }
+        return isUnivalTree(root.leftChild) && isUnivalTree(root.rightChild);
+    }
+
+    private int numberOfUnivalTrees(Node root) {
+        if (root == null) {
+            return 0;
+        }
+        int totalCount = numberOfUnivalTrees(root.leftChild)
+                + numberOfUnivalTrees(root.rightChild);
+        if (isUnivalTree(root)) {
+            totalCount = totalCount + 1;
+        }
+        return totalCount;
+    }
+
+    private boolean isIdentical(Node tree1, Node tree2) {
+        if (tree1 == null && tree2 != null) {
+            return false;
+        }
+        if (tree1 != null && tree2 == null) {
+            return false;
+        }
+
+        if (tree1 == null) {
+            return true;
+        }
+
+        return tree1.data == tree2.data
+                && isIdentical(tree1.leftChild, tree2.leftChild)
+                && isIdentical(tree1.rightChild, tree2.rightChild);
+
+    }
+
     public void display(Node root) {
         //BASE CASE
         if (root == null) {
@@ -186,6 +229,27 @@ public class BinaryTreeApp
         System.out.println("----------- POSTORDER TRAVERSAL----------------");
         bt.postOrderTraversal(root);
         System.out.println();
+
+        System.out.println("--------check if the tree is unival tree --------");
+        System.out.println("Is tree unival tree : " + bt.isUnivalTree(root));
+        System.out.println();
+
+        BinaryTreeApp univalBt = new BinaryTreeApp();
+        Node univalRoot = new Node(2);
+        univalRoot.leftChild = new Node(2);
+        univalRoot.rightChild = new Node(2);
+        univalRoot.leftChild.leftChild = new Node(2);
+        univalRoot.leftChild.rightChild = new Node(2);
+        univalRoot.rightChild = new Node(2);
+        univalRoot.rightChild.leftChild = new Node(2);
+        univalRoot.rightChild.rightChild = new Node(2);
+        System.out.println("is the given tree unival tree : " + univalBt.isUnivalTree(univalRoot));
+        System.out.println();
+        System.out.println("Total number of unival trees are : " + univalBt.numberOfUnivalTrees(univalRoot));
+
+        System.out.println();
+        System.out.println("Are the given two trees identical : ");
+        System.out.println(bt.isIdentical(root, univalRoot));
     }
 
 }
