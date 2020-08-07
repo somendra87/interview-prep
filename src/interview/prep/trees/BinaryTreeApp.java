@@ -1,5 +1,7 @@
 package interview.prep.trees;
 
+import java.util.LinkedList;
+
 /**
  * @author somendraprakash created on 01/08/20
  */
@@ -109,8 +111,108 @@ public class BinaryTreeApp
         System.out.print(root.data + "\t");
     }
 
+    private int numberOfLeafNodes(Node root) {
+        // recursive equation
+        //NL(root) = 1 : if root is leaf
+        //           NL(LST) + NL(RST) : if root is internal node
+        if (root == null) {
+            return 0;
+        }
+        if (root.leftChild == null && root.rightChild == null) {
+            return 1;
+        } else {
+            return numberOfLeafNodes(root.leftChild) + numberOfLeafNodes(root.rightChild);
+        }
+    }
+
+    private int internalNodesCount(Node root) {
+        // internal nodes are non leaf nodes in the tree
+        // internalCount(root) = 0 : if root is a leaf node
+        //                     = 1 + internalCount(root.left) + internalCount(root.right)
+        if (root == null) {
+            return 0;
+        }
+        if (root.leftChild == null && root.rightChild == null) {
+            return 0;
+        } else {
+            return 1 + internalNodesCount(root.leftChild)
+                    + internalNodesCount(root.rightChild);
+        }
+    }
+
+    private int fullNodeCount(){
+        // if the node is having all the children is called full children
+        // in binary tree the full node will be a node having both child (left and right)
+        //
+        return 0;
+    }
+
     private int findMin() {
         return 0;
+    }
+
+    private boolean isUnivalTree(Node root) {
+        if (root == null) {
+            return true;
+        }
+        if (root.leftChild != null && root.leftChild.data != root.data) {
+            return false;
+        }
+        if (root.rightChild != null && root.rightChild.data != root.data) {
+            return false;
+        }
+        return isUnivalTree(root.leftChild) && isUnivalTree(root.rightChild);
+    }
+
+    private int numberOfUnivalTrees(Node root) {
+        if (root == null) {
+            return 0;
+        }
+        int totalCount = numberOfUnivalTrees(root.leftChild)
+                + numberOfUnivalTrees(root.rightChild);
+        if (isUnivalTree(root)) {
+            totalCount = totalCount + 1;
+        }
+        return totalCount;
+    }
+
+    private boolean isIdentical(Node tree1, Node tree2) {
+        /*if (tree1 == null && tree2 != null) {
+            return false;
+        }
+        if (tree1 != null && tree2 == null) {
+            return false;
+        }
+
+        if (tree1 == null) {
+            return true;
+        }*/
+
+        if (tree1 == null && tree2==null){
+            return true;
+        }
+        if (tree1 != null && tree2 != null) {
+            return tree1.data == tree2.data
+                    && isIdentical(tree1.leftChild, tree2.leftChild)
+                    && isIdentical(tree1.rightChild, tree2.rightChild);
+        }
+        return false;
+    }
+
+    private void levelOrderTraversal(Node root) {
+        LinkedList<Node> queue = new LinkedList<>();
+        queue.addLast(root);
+
+        while (!queue.isEmpty()) {
+            Node removed = queue.removeFirst();
+            System.out.print(removed.data + "\t");
+            if (removed.leftChild != null) {
+                queue.addLast(removed.leftChild);
+            }
+            if (removed.rightChild != null) {
+                queue.addLast(removed.rightChild);
+            }
+        }
     }
 
     public void display(Node root) {
@@ -185,6 +287,40 @@ public class BinaryTreeApp
 
         System.out.println("----------- POSTORDER TRAVERSAL----------------");
         bt.postOrderTraversal(root);
+        System.out.println();
+
+        System.out.println("--------check if the tree is unival tree --------");
+        System.out.println("Is tree unival tree : " + bt.isUnivalTree(root));
+        System.out.println();
+
+        BinaryTreeApp univalBt = new BinaryTreeApp();
+        Node univalRoot = new Node(50);
+        univalRoot.leftChild = new Node(45);
+        univalRoot.leftChild.leftChild = new Node(30);
+        univalRoot.leftChild.rightChild = new Node(49);
+
+        univalRoot.rightChild = new Node(67);
+        univalRoot.rightChild.leftChild = new Node(58);
+        univalRoot.rightChild.rightChild = new Node(87);
+
+        System.out.println("is the given tree unival tree : " + univalBt.isUnivalTree(univalRoot));
+        System.out.println();
+        System.out.println("Total number of unival trees are : " + univalBt.numberOfUnivalTrees(univalRoot));
+
+        System.out.println();
+        System.out.println("Are the given two trees identical : ");
+        System.out.println(bt.isIdentical(root, univalRoot));
+
+        System.out.println();
+        System.out.println("Level order traversal of the tree : ");
+        bt.levelOrderTraversal(univalRoot);
+        System.out.println();
+
+        System.out.println("Number of leaf nodes in the tree rooted at "
+                + root.data + " is " + bt.numberOfLeafNodes(root));
+        System.out.println();
+
+        System.out.println("Number of internal node (non leaf) nodes " + bt.internalNodesCount(root));
         System.out.println();
     }
 
