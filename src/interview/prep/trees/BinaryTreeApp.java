@@ -35,6 +35,8 @@ public class BinaryTreeApp
         return root;
     }
 
+
+
     private int height(Node root) {
         if (root == null) {
             return -1;
@@ -42,8 +44,7 @@ public class BinaryTreeApp
 
         int leftSubtreeHeight = height(root.leftChild);
         int rightSubtreeHeight = height(root.rightChild);
-
-        return Math.max(leftSubtreeHeight, rightSubtreeHeight) + 1;
+        return Math.min(leftSubtreeHeight, rightSubtreeHeight) + 1;
     }
 
     private int size(Node root) {
